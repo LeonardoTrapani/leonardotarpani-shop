@@ -14,10 +14,11 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  const products = Product.getProducts();
-  res.render("shop", {
-    products: products,
-    pageTitle: "Shop",
-    path: "/",
+  Product.getProducts(products => {
+    res.render("shop", {
+      products: products,
+      pageTitle: "Shop",
+      path: "/",
+    });
   });
 };
