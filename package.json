@@ -1,23 +1,23 @@
 {
-  "name": "first-node-application",
+  "name": "nodejs-complete-guide",
   "version": "1.0.0",
+  "description": "Complete Node.js Guide",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "start-server": "node app.js"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Maximilian Schwarzmüller",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "nodemon": "^1.18.3"
   },
   "dependencies": {
-    "body-parser": "^1.20.0",
-    "ejs": "^3.1.8",
-    "express": "^4.18.1",
-    "express-handlebars": "3.0",
-    "pug": "^3.0.2"
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "pug": "^2.0.3"
   }
 }
