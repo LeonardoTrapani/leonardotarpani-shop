@@ -4,12 +4,12 @@ exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
-    editing: false
+    editing: false,
   });
 };
 
 exports.postAddProduct = (req, res, next) => {
-  const { title, imageUrl, price, description} = req.body;
+  const { title, imageUrl, price, description } = req.body;
   const product = new Product(null, title, imageUrl, description, price);
   product.save();
   res.redirect("/");
@@ -35,11 +35,11 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-  const { productId, title, imageUrl, price, description} = req.body;
+  const { productId, title, imageUrl, price, description } = req.body;
   const product = new Product(productId, title, imageUrl, description, price);
   product.save();
   res.redirect("/admin/products");
-}
+};
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
@@ -51,4 +51,8 @@ exports.getProducts = (req, res, next) => {
   });
 };
 
-
+exports.postDeleteProduct = (req, res, next) => {
+  const { productId } = req.body;
+  Product.deleteById(productId);
+  res.redirect("/admin/products");
+};
