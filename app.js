@@ -38,10 +38,8 @@ app.use(
 
 app.use((req, res, next) => {
   if (!req.session.user) {
-    console.log('ERRORE');
     return next();
   }
-  console.log('NO ERRORE');
   User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
@@ -62,8 +60,8 @@ mongoose
     User.findOne().then((user) => {
       if (!user) {
         const user = new User({
-          name: 'Leonardo',
-          email: 'leonard.trapani@gmail.com',
+          name: 'Max',
+          email: 'max@test.com',
           cart: {
             items: [],
           },
