@@ -1,23 +1,37 @@
 {
   "name": "leonardotrapani-shop",
   "version": "1.0.0",
-  "description": "Leonardo Trapani's shop",
+  "description": "Leonardo Trapani's online shop",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
     "start-server": "node app.js"
   },
-  "author": "Maximilian Schwarzmüller",
+  "author": "Leonardo Trapani",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.18"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "ejs": "^3.1.8",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^3.1.1",
+    "csurf": "^1.11.0",
+    "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "mysql2": "^2.3.3",
-    "sequelize": "^6.21.0"
-  }
+    "express-session": "^1.17.3",
+    "mongodb": "^3.1.6",
+    "mongoose": "^6.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeonardoTrapani/online_shop.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/LeonardoTrapani/online_shop/issues"
+  },
+  "homepage": "https://github.com/LeonardoTrapani/online_shop#readme"
 }
