@@ -2,6 +2,36 @@ const bcrypt = require('bcryptjs');
 
 const User = require('../models/user');
 
+const nodemailer = require('nodemailer');
+
+const transport = nodemailer.createTransport({
+  //mailtrap
+  host: 'smtp.mailtrap.io',
+  port: 2525,
+  auth: {
+    user: 'b24ba6b8a4d513',
+    pass: '71e321b1393c91',
+  },
+});
+
+// const transport = nodemailer.createTransport({
+//   //gmail
+//   host: 'smtp.gmail.com',
+//   port: 587,
+//   auth: {
+//     user: 'leonard.trapani@gmail.com',
+//     pass: 'miPiaceGoogle2.0',
+//   },
+// });
+
+transport.verify(function (error, success) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Server is ready to take our messages');
+  }
+});
+
 exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
@@ -25,7 +55,7 @@ exports.postLogin = (req, res, next) => {
     .then((user) => {
       if (!user) {
         req.flash('error', 'Invalid email or password.');
-        return res.redirect('/login');
+        res.redirect('/login');
       }
       bcrypt
         .compare(password, user.password)
@@ -37,7 +67,6 @@ exports.postLogin = (req, res, next) => {
               res.redirect('/');
             });
           }
-          req.flash('error', 'Invalid email or password');
           res.redirect('/login');
         })
         .catch((err) => {
@@ -73,6 +102,19 @@ exports.postSignup = (req, res, next) => {
         })
         .then((result) => {
           res.redirect('/login');
+          const mailOptions = {
+            from: '"LT Shop" <shop@ltshop.com>',
+            to: email,
+            subject: 'Signup succeded!',
+            html: '<h1>Signup succeded!</h1>',
+          };
+
+          return transport.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+          });
         });
     })
     .catch((err) => {
