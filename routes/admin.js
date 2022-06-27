@@ -23,8 +23,7 @@ router.post(
     body('title', 'Please provide a valid title')
       .isLength({ min: 3 })
       .withMessage('The title is too short')
-      .isAlphanumeric()
-      .withMessage('Please do not use special characters for the title')
+      .isString()
       .trim(),
     body('imageUrl', 'Please provide a valid image-url').isURL(),
     body('price', 'Please provide a valid price')
@@ -35,7 +34,11 @@ router.post(
       .isLength({
         min: 20,
       })
-      .withMessage('The description is too short (min. 20 characters)'),
+      .withMessage('The description is too short (min. 20 characters)')
+      .isLength({
+        max: 400,
+      })
+      .withMessage('The description is too long (max 400 characters)'),
   ],
   adminController.postAddProduct
 );
@@ -49,6 +52,7 @@ router.post(
     body('title', 'Please provide a valid title')
       .isLength({ min: 3 })
       .withMessage('The title is too short')
+      .isString()
       .trim(),
     body('imageUrl', 'Please provide a valid image-url').isURL(),
     body('price', 'Please provide a valid price')
@@ -59,7 +63,11 @@ router.post(
       .isLength({
         min: 20,
       })
-      .withMessage('The description is too short (min. 20 characters)'),
+      .withMessage('The description is too short (min. 20 characters)')
+      .isLength({
+        max: 400,
+      })
+      .withMessage('The description is too long (max 400 characters)'),
   ],
   adminController.postEditProduct
 );
