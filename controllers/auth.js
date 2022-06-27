@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const { errorStrictEqual } = require('mongodb/lib/core/utils');
 
 const transport = nodemailer.createTransport({
   //mailtrap
@@ -127,4 +129,70 @@ exports.postLogout = (req, res, next) => {
     console.log(err);
     res.redirect('/');
   });
+};
+
+exports.getReset = (req, res, next) => {
+  res.render('auth/reset', {
+    path: '/reset',
+    pageTitle: 'Reset Password',
+    errorMessage: req.flash('error'),
+  });
+};
+
+exports.postReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/reset');
+    }
+    const token = buffer.toString('hex');
+    User.findOne({
+      email: req.body.email,
+    })
+      .then((user) => {
+        if (!user) {
+          req.flash('error', 'No account with that email found.');
+          return res.redirect('/reset');
+        }
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      })
+      .then((result) => {
+        res.redirect('/');
+        const mailOptions = {
+          from: '"LT Shop" <shop@ltshop.com>',
+          to: req.body.email,
+          subject: 'Password Reset',
+          html: `
+          <p>You requested password reset</p>
+          <p>Click this <a href="http://localhost:6969/reset/${token}">link</a> to set a new password.</p>
+          `,
+        };
+        return transport.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            return console.log(error);
+          }
+          console.log('Message sent: %s', info.messageId);
+        });
+      })
+      .catch((err) => console.log(err));
+  });
+};
+
+exports.getNewPassowrd = (req, res, next) => {
+  const token = req.params.token;
+  User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() },
+  })
+    .then((user) => {
+      res.render('auth/new-password', {
+        path: '/new-password',
+        pageTitle: 'New Password',
+        errorMessage: req.flash('error'),
+        userId: user._id.toString(),
+      });
+    })
+    .catch((err) => console.log(err));
 };
