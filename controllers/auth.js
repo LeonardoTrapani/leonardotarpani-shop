@@ -114,11 +114,10 @@ exports.postLogin = (req, res, next) => {
           });
         })
         .catch((err) => {
-          console.log(err);
-          res.redirect('/login');
+          return next(new Error(err));
         });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => next(new Error(err)));
 };
 
 exports.postSignup = (req, res, next) => {
@@ -165,7 +164,7 @@ exports.postSignup = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      return next(new Error(err));
     });
 };
 
@@ -221,7 +220,7 @@ exports.postReset = (req, res, next) => {
           console.log('Message sent: %s', info.messageId);
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => next(new Error(err)));
   });
 };
 
@@ -242,7 +241,7 @@ exports.getNewPassowrd = (req, res, next) => {
         passwordToken: token,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => next(new Error(err)));
 };
 
 exports.postNewPassword = (req, res, next) => {
@@ -266,5 +265,5 @@ exports.postNewPassword = (req, res, next) => {
     .then((result) => {
       res.redirect('/login');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => next(new Error(err)));
 };
