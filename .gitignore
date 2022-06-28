@@ -2,4 +2,5 @@ node_modules/
 .vscode/
 package-lock.json
 images/
-data/invoices
+data/invoices/
+images/
