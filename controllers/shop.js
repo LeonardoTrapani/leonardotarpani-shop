@@ -9,7 +9,7 @@ const Order = require('../models/order');
 const ITEMS_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => {
-  const page = req.query.page || 1;
+  const page = +req.query.page || 1;
   let totalItems;
 
   Product.find()
@@ -24,7 +24,7 @@ exports.getProducts = (req, res, next) => {
       res.render('shop/product-list', {
         prods: products,
         pageTitle: 'Products',
-        path: '/',
+        path: '/products',
         currentPage: page,
         hasNextPage: ITEMS_PER_PAGE * page < totalItems,
         hasPreviousPage: page > 1,
@@ -58,7 +58,7 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  const page = req.query.page || 1;
+  const page = +req.query.page || 1;
   let totalItems;
 
   Product.find()
