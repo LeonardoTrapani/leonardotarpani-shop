@@ -7,7 +7,6 @@ const { validationResult } = require('express-validator');
 const User = require('../models/user');
 
 const transporter = nodemailer.createTransport({
-  //mailtrap
   host: 'smtp.mailtrap.io',
   port: 2525,
   auth: {
@@ -15,15 +14,6 @@ const transporter = nodemailer.createTransport({
     pass: '71e321b1393c91',
   },
 });
-
-transporter.verify(function (error, success) {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Server is ready to take our messages');
-  }
-});
-
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
   if (message.length > 0) {
@@ -122,7 +112,11 @@ exports.postLogin = (req, res, next) => {
           res.redirect('/login');
         });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postSignup = (req, res, next) => {
@@ -165,7 +159,9 @@ exports.postSignup = (req, res, next) => {
       // });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -211,7 +207,7 @@ exports.postReset = (req, res, next) => {
         res.redirect('/');
         transporter.sendMail({
           to: req.body.email,
-          from: 'shop@ltshop.com',
+          from: 'shop@node-complete.com',
           subject: 'Password reset',
           html: `
             <p>You requested a password reset</p>
@@ -220,7 +216,9 @@ exports.postReset = (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
       });
   });
 };
@@ -230,9 +228,6 @@ exports.getNewPassword = (req, res, next) => {
   User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
     .then((user) => {
       let message = req.flash('error');
-      if (!user._id) {
-        throw new Error("Can't find a user with that token");
-      }
       if (message.length > 0) {
         message = message[0];
       } else {
@@ -247,7 +242,9 @@ exports.getNewPassword = (req, res, next) => {
       });
     })
     .catch((err) => {
-      return next(new Error(err));
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -276,6 +273,8 @@ exports.postNewPassword = (req, res, next) => {
       res.redirect('/login');
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
