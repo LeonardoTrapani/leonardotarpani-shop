@@ -7,11 +7,11 @@ const { validationResult } = require('express-validator');
 const User = require('../models/user');
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.mailtrap.io',
-  port: 2525,
+  host: process.env.NODEMAILER_HOST, //smtp.mailtrap.io
+  port: process.env.NODEMAILER_PORT, //2525
   auth: {
-    user: 'b24ba6b8a4d513',
-    pass: '71e321b1393c91',
+    user: process.env.NODEMAILER_USER, //b24ba6b8a4d513
+    pass: process.env.NODEMAILER_PASSWORD, //71e321b1393c91
   },
 });
 exports.getLogin = (req, res, next) => {
@@ -151,12 +151,6 @@ exports.postSignup = (req, res, next) => {
     })
     .then((result) => {
       res.redirect('/login');
-      // return transporter.sendMail({
-      //   to: email,
-      //   from: 'shop@node-complete.com',
-      //   subject: 'Signup succeeded!',
-      //   html: '<h1>You successfully signed up!</h1>'
-      // });
     })
     .catch((err) => {
       const error = new Error(err);
@@ -211,7 +205,7 @@ exports.postReset = (req, res, next) => {
           subject: 'Password reset',
           html: `
             <p>You requested a password reset</p>
-            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+            <p>Click this <a href="${process.env.URL}${process.env.PORT}/reset/${token}">link</a> to set a new password.</p>
           `,
         });
       })
