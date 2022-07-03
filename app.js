@@ -17,7 +17,6 @@ const morgan = require('morgan');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 
-console.log(process.env.MONGO_URI);
 const MONGODB_URI = process.env.MONGO_URI;
 
 const app = express();
