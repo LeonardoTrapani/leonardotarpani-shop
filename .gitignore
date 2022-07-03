@@ -2,9 +2,6 @@ node_modules/
 .vscode/
 package-lock.json
 nodemon.json
-images/
-data/invoices/
-images/
 access.log
 server.key
 -server.cert
