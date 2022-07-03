@@ -190,18 +190,17 @@ exports.postReset = (req, res, next) => {
         }
         user.resetToken = token;
         user.resetTokenExpiration = Date.now() + 3600000;
-        return user.save();
-      })
-      .then((result) => {
-        res.redirect('/');
-        transporter.sendMail({
-          to: req.body.email,
-          from: 'shop@node-complete.com',
-          subject: 'Password reset',
-          html: `
-            <p>You requested a password reset</p>
-            <p>Click this <a href="${process.env.URL}${process.env.PORT}/reset/${token}">link</a> to set a new password.</p>
-          `,
+        user.save().then((result) => {
+          transporter.sendMail({
+            to: req.body.email,
+            from: 'shop@node-complete.com',
+            subject: 'Password reset',
+            html: `
+              <p>You requested a password reset</p>
+              <p>Click this <a href="${process.env.URL}${process.env.PORT}/reset/${token}">link</a> to set a new password.</p>
+            `,
+          });
+          res.redirect('/');
         });
       })
       .catch((err) => {
