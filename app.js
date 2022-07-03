@@ -131,6 +131,7 @@ mongoose
       // https
       //   .createServer({ key: privateKey, cert: certificate }, app)
       .listen(process.env.PORT || 3000);
+    console.log('App is running on port ' + process.env.PORT || 3000);
   })
   .catch((err) => {
     console.log(err);
